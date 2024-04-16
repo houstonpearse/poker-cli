@@ -1,0 +1,5 @@
+A-S,A-C,A-H,A-D,K-S
+A-S,A-C,A-H,A-D,Q-S
+5-S,5-C,5-H,5-D,K-S
+4-S,4-C,4-H,4-D,A-S
+4-S,4-C,4-H,4-D,K-S
