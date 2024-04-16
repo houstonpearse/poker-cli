@@ -1,10 +1,21 @@
-### Simple Poker Simulator
+<h1 align="center">Simple Poker CLI tool and Simulator</h1>
+<br />
+<div align="center">
+  <a href="https://github.com/houstonpearse/poker-cli">
+    <img src="https://github.com/Any-Many/Pixel-Poker-Playing-Cards/blob/main/small/kDimondsSmall.png" alt="Logo" width="200" height="200">
+  </a>
+  <a href="https://github.com/houstonpearse/poker-cli">
+    <img src="https://github.com/Any-Many/Pixel-Poker-Playing-Cards/blob/main/small/qHeartsSmall.png" alt="Logo" width="200" height="200">
+  </a>
 
-![image](https://github.com/Any-Many/Pixel-Poker-Playing-Cards/blob/main/big/qDimondsBig.png)
-
+<h3 align="center">Poker CLI</h3>
+<p>
 A basic Poker simulator and cli tool.
 
 Poker logic follows high poker rules
+
+</p>
+</div>
 
 ## Features
 
