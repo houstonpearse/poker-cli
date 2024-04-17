@@ -12,5 +12,6 @@ function test () {
 test straight-flush
 test four-of-a-kind
 test full-house
+test full-house-6
 test flush
 test straight

@@ -88,7 +88,7 @@ int compare_hands(const void *a, const void *b) {
         }
     } 
 
-    // quads
+    // quads - single kicker
     int p1kicker=-1,p2kicker=-1;
     int tied=0;
     p1len=p2len=0;
@@ -119,8 +119,8 @@ int compare_hands(const void *a, const void *b) {
         } else if (p2len>0) {
             p2kicker=i;
         }
-
     }
+
     // fullhouse
     int p1two=-1,p2two=-1,p1three=-1,p2three=-1;
     for (i=NUMVALS-1;i>=0;i--) {
@@ -129,10 +129,16 @@ int compare_hands(const void *a, const void *b) {
             p1len+=p1[i][j];
             p2len+=p2[i][j]; 
         }
-        if (p1len==2 && p1two==-1) p1two=i;
-        if (p2len==2 && p2two==-1) p2two=i;
-        if (p1len==3 && p1three==-1) p1three=i;
-        if (p2len==3 && p2three==-1) p2three=i;
+        if (p1len==3 && p1three==-1) {
+            p1three=i;
+        } else if (p1len>=2 && p1two==-1) {
+            p1two=i;
+        }
+        if (p2len==3 && p2three==-1) {
+            p2three=i;
+        } else if (p2len>=2 && p2two==-1){
+            p2two=i; 
+        } 
         if (p2two!=-1 && p2three!=-1 && p1two!=-1 && p1three!=-1) {
             if (p1three==p2three){
                 return p2two-p1two;
@@ -141,6 +147,7 @@ int compare_hands(const void *a, const void *b) {
         }
         
     }
+
     // flush
     int p1flush=0,p2flush=0;
     for (j=0;j<NUMSUITS;j++) {
