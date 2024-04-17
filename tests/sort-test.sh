@@ -16,3 +16,4 @@ test full-house-6
 test flush
 test straight
 test triple
+test pairs-singles

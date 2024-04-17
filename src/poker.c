@@ -245,6 +245,60 @@ int compare_hands(const void *a, const void *b) {
     // two pair
     // pair
     // high card
+    int p1first=-1,p2first=-1,p1second=-1,p2second=-1;
+    p1kicker=-1,p2kicker=-1;
+    int equalkickernum=0;
+    for (i=NUMVALS-1;i>=0;i--) {
+        p1len=p2len=0;
+        for (j=0;j<NUMSUITS;j++) {
+            p1len+=p1[i][j];
+            p2len+=p2[i][j]; 
+        }
+        if (p1len==2 && p1second!=-1 && p1kicker==-1) p1kicker=i; // three pairs
+        if (p2len==2 && p2second!=-1 && p2kicker==-1) p2kicker=i; // three pairs
+        if (p1len==2 && p1first!=-1 && p1second==-1) p1second=i;
+        if (p2len==2 && p2first!=-1 && p2second==-1) p2second=i;
+        if (p1len==2 && p1first==-1) p1first=i;
+        if (p2len==2 && p2first==-1) p2first=i;
+        if (p1len==1 && p1kicker==-1) p1kicker=i;
+        if (p2len==1 && p2kicker==-1) p2kicker=i;
+        if (p1kicker!=-1 && p1kicker==p2kicker) {
+            p1kicker=-1;
+            p2kicker=-1;
+            equalkickernum+=1;
+        }
+    }
+    // printf("%d %d %d\n",p1first,p1second,p1kicker);
+    // printf("%d %d %d\n",p2first,p2second,p2kicker);
+    // printf("%d\n",equalkickernum);
+    if (p1first!=-1 && p2first!=-1) { // both have at least 1 pair
+        if (p1second!=-1 && p2second !=-1) { // both have 2 pairs
+            if (p1first==p2first) {
+                if (p1second==p2second) {
+                    if (equalkickernum<1) {
+                        return p2kicker-p1kicker;
+                    }
+                    return 0;
+                }
+                return p2second-p1second;
+            }
+            return p2first-p1first;
+        }
+        if (p1second!=p2second) return p2second-p1second; // two pair and one pair
+        if (p1first==p2first) { // both have 1 pair of equal rank
+            if (equalkickernum<3) {
+                return p2kicker-p1kicker;
+            }
+            return 0;
+        }
+        return p2first-p1first; 
+    }
+    if (p1first!=p2first){ // only 1 has a pair
+        return p2first-p1first;
+    }
+    if (equalkickernum<5) { // both no pairs
+        return p2kicker-p1kicker;
+    }
     return 0;
 }
 
