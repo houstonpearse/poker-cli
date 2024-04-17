@@ -15,3 +15,4 @@ test full-house
 test full-house-6
 test flush
 test straight
+test triple

@@ -209,7 +209,39 @@ int compare_hands(const void *a, const void *b) {
     if (p1len==5&&p2len==5) return 0;
     if (p1len==5) return -1;
     if (p2len==5) return 1;
-    // triple
+
+    // triple -- two kickers
+    int p1kicker1=-1;
+    int p2kicker1=-1;
+    int p1kicker2=-1;
+    int p2kicker2=-1;
+    p1three=-1;
+    p2three=-1;
+    for (i=NUMVALS-1;i>=0;i--) {
+        p1len=p2len=0;
+        for (j=0;j<NUMSUITS;j++) {
+            p1len+=p1[i][j];
+            p2len+=p2[i][j]; 
+        }
+        if (p1len==1 && p1kicker1!=-1 && p1kicker2==-1) p1kicker2=i; // set second kicker
+        if (p2len==1 && p2kicker1!=-1 && p2kicker2==-1) p2kicker2=i;
+        if (p1len==1 && p1kicker1==-1) p1kicker1=i; // set first kicker
+        if (p2len==1 && p2kicker1==-1) p2kicker1=i;
+        if (p1len==3 && p1three==-1) p1three=i; // set three of a kind
+        if (p2len==3 && p2three==-1) p2three=i;
+        if (p1three!=-1 && p2three!=-1) {
+            // tie break triple with 2 kickers
+            if (p1kicker1!=p2kicker1) return p2kicker1-p1kicker1; // kicker 1 are not tied
+            if (p1kicker2!=p2kicker2) return p2kicker2-p1kicker2; // kicker 2 are not tied
+            if (p1kicker2!=-1) return 0; // kicker 1 and 2 are tied
+            // kickers are either tied or have no vals
+        } else if (p1three!=-1) {
+            return -1;
+        } else if (p2three!=-1) {
+            return 1;
+        }
+    }
+
     // two pair
     // pair
     // high card

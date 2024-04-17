@@ -1,0 +1,9 @@
+4-S,4-C,4-H,K-D,A-S,Q-C
+4-S,4-C,4-H,K-D,J-S,T-H
+5-S,5-C,5-H,Q-D,Q-S,Q-H
+4-S,4-C,4-H,T-D,9-S,8-H
+5-S,5-C,5-H,T-D,9-S,8-H
+A-S,A-C,A-H,5-D,6-S,7-H
+A-S,A-C,A-H,K-D,Q-S,8-H
+A-S,A-C,A-H,K-D,Q-S,7-H
+A-S,A-C,A-H,K-D,J-S,7-H
