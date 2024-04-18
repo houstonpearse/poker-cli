@@ -10,6 +10,7 @@ typedef struct {
     int players;
     int hands;
     int seed;
+    int verbose;
     char *table;
     char *hand;
 } args;
@@ -21,23 +22,26 @@ const struct option long_opts[] = {
     {"seed", required_argument, NULL, 's'},
     {"table", required_argument, NULL, 't'},
     {"hand", required_argument,NULL, 'a'},
+    {"verbose", no_argument,NULL,'v'},
     {NULL, 0, NULL, 0}
 };
 
-const char *short_opts = "h:p:n:s:t:a:";
+const char *short_opts = "h:p:n:s:t:a:v:";
 
 void print_help() {
     printf("Usage:\n");
     printf("\t./poker-cli\n");
     printf("\t./poker-cli [--players <int> --hands <int> --seed <int> ]\n");
-    printf("\t./poker-cli [--players <int> --hands <int>  --hand [<card>]'A-S,A-C' --table [<card]'A-H,A-D']\n");
+    printf("\t./poker-cli [--players <int> --hands <int>  --hand list-of-cards1 --table list-of-cards]\n");
+    printf("\t./poker-cli --help\n");
     printf("\tcat hands.txt | ./poker-cli sort\n");
     printf("\nOption Values:\n");
-    printf("\tplayers<int> must be between 1 and 10\n");
-    printf("\thands<int> must be greater than 0\n");
-    printf("\tseed<int> must be greater than 0\n");
-    printf("\thand[<card>] must be a list of 1 or 2 cards separated by ',' or ' '\n");
-    printf("\ttable[<card>] must be a list of 1 to 5 cards separated by ',' or ' '\n");
+    printf("\t-h --help \n\t\tdisplays the help message and exits\n");
+    printf("\t-p --players\n\t\t<int> must be between 1 and 10\n");
+    printf("\t-n --hands\n\t\t<int> must be greater than 0\n");
+    printf("\t-s --seed\n\t\t<int> must be greater than 0\n");
+    printf("\t-a --hand\n\t\t[<card>] must be a list of 1 or 2 cards separated by ',' or ' '\n");
+    printf("\t-v --table\n\t\t[<card>] must be a list of 1 to 5 cards separated by ',' or ' '\n");
     printf("\nOption types:\n");
     printf("\t<card> must be in the format '<value>-<suit>' where value \n");
     printf("\t<value> must be one of the following: A 1 2 3 4 5 6 7 8 9 T J Q K\n");
@@ -98,12 +102,17 @@ void parse_args(int argc, char **argv, args *program_args) {
                 program_args->hand = (char*)malloc((strlen(optarg)+1)*sizeof(char));
                 strcpy(program_args->hand,optarg);
                 break;
+            case 'v':
+                program_args->verbose=1;
+                break;
         }
     }
     int i;
     for (i = optind; i < argc; i++) {
         if (strcmp(argv[i],"sort")==0) {
             program_args->sort = 1;
+        } else if (strcmp(argv[i],"sim")==0) {
+            program_args->sort = 0;
         } else {
             fprintf(stderr,"Unknown argument: %s\n",argv[i]);
             print_help();

@@ -19,13 +19,40 @@ Poker logic follows high poker rules
 
 ## Features
 
-1. Sort hands based on poker rules `poker-cli sort`
-   - hands are of the format "A-S,K-S,Q-S,J-S,T-S".
-   - hands are read from stdin separated by newlines.
-2. simulate poker hands `poker-cli --hand "A-S,K-S,Q-S,J-S,T-S" --players 10 --hands 25000 --seed 1234`
-   - by default players cards are randomly selected
-   - can set hands of players
-   - can set table cards
+### `poker-cli sort`
+
+- reads hands of the format "A-S,K-S,Q-S,J-S,T-S" from stdin.
+- outputs hands in the order of highest rank to lowest rank.
+- hands can have any number of cards.
+- poker rules are high poker rules. This means an Ace can be a high or low card.
+
+### `poker-cli sim`
+
+- simulates poker and outputs statistics about win percentage.
+- By default players cards are randomly selected
+- By setting the hand and table cards we can learn about the odds of different hands
+  - ./poker-cli sim --hand 'A-S,A-C' --hands 50000 --players 5
+  - win=0.51, lose=0.49, tied=0.01
+  - ./poker-cli sim --hand 'A-S,A-C' --hands 50000 --players 5 --table 'A-D'
+  - win=0.80, lose=0.20, tied=0.00
+- By setting the number of players we can see how it affects our chances of having the highest ranking hand
+  - ./poker-cli sim --hand 'A-S,A-C' --hands 50000 --players 10
+  - win=0.27, lose=0.73, tied=0.00
+- We can set the verbose option to see individual hands played
+
+```
+⚡ ./poker-cli sim --verbose
+seed: 1713451877
+game 1
+table: T-C,5-S,Q-H,8-S,A-S
+player2: 5-H,A-C
+player0: J-C,A-D
+player4: Q-D,2-C
+player1: T-D,K-D
+player3: 6-H,2-S
+win,lost,tied
+0.000,1.000,0.000
+```
 
 ## Usage
 
@@ -57,16 +84,32 @@ K-S,Q-C,J-H,T-S,9-C
 
 ## Options
 
-| option | long option     | effect                               |
-| ------ | --------------- | ------------------------------------ |
-| -h     | --help          | display help message                 |
-| -p     | --players <int> | number of players for simulation     |
-| -h     | --hands <int>   | number of hands for simulation       |
-| -s     | --seed <int>    | suedo-random seed for shuffling deck |
-| -t     | --table         | sets the table cards                 |
-| -a     | --hand          | sets the hand for player 0           |
+| option | long option     | effect                                                    |
+| ------ | --------------- | --------------------------------------------------------- |
+| -h     | --help          | display help message                                      |
+| -v     | --verbose       | displays information for each hand and ranking of players |
+| -p     | --players <int> | number of players for simulation                          |
+| -h     | --hands <int>   | number of hands for simulation                            |
+| -s     | --seed <int>    | suedo-random seed for shuffling deck                      |
+| -t     | --table         | sets the table cards                                      |
+| -a     | --hand          | sets the hand for player 0                                |
 
 ## Running test
 
 `make sort-test` for testing sort cli tool.
 `make unit-test` for unit testing of source code.
+
+```
+⚡ make sort-test
+make poker-cli
+make[1]: `poker-cli' is up to date.
+bash ./tests/sort-test.sh
+✅ Test straight-flush Passed
+✅ Test four-of-a-kind Passed
+✅ Test full-house Passed
+✅ Test full-house-6 Passed
+✅ Test flush Passed
+✅ Test straight Passed
+✅ Test triple Passed
+✅ Test pairs-singles Passed
+```

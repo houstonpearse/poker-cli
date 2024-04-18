@@ -35,7 +35,7 @@ void reset_game(deck_t *deck,deck_t *table, deck_t players[],int player_count) {
 }
 
 /* must have equal sized hands */
-int compare_hands(const void *a, const void *b) {
+int cmp_hand(const void *a, const void *b) {
     deck_t *player1 = (deck_t*)a, *player2 = (deck_t*)b;
     int i,j,k; 
     int p1[NUMVALS][NUMSUITS]={{0}},p2[NUMVALS][NUMSUITS]={{0}};
@@ -311,12 +311,28 @@ void sort_hands(deck_t *table, deck_t players[], int player_count) {
             }
         }
     }
-    qsort(players,player_count,sizeof(deck_t),compare_hands);
+    qsort(players,player_count,sizeof(deck_t),cmp_hand);
     if (table != NULL) {
         for (i=0; i<player_count;i++) {
             players[i].numcards -= table->numcards;
         }
     }
+}
+
+int compare_hand(deck_t *table, deck_t *player1, deck_t *player2) {
+    int i;
+    if (table != NULL) { 
+        for (i=0; i<table->numcards;i++){
+            add_card_reference(player1,table->cards[i]);
+            add_card_reference(player2,table->cards[i]);
+        }
+    }
+    int result = cmp_hand(player1,player2);
+    if (table != NULL) {
+        player1->numcards -= table->numcards;
+        player2->numcards -= table->numcards;
+    }
+    return result;
 }
 
 void print_hands(deck_t players[],int num_players) {

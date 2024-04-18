@@ -6,28 +6,37 @@
 #define DEFAULT_HANDS 1
 #define DEFAULT_SEED time(NULL)
 #define INITIAL_ARR_SIZE 1
+#define DEFAULT_COMMAND 0 // sim
+#define DEFAULT_VERBOSE 0
+
+typedef struct {
+    int won;
+    int lost;
+    int tied;
+}stats_t;
 
 void sort();
-void simulation(int num_players, int hands,int seed, char *table_arg, char *hand_arg);
+void simulation(int num_players, int hands,int seed, char *table_arg, char *hand_arg, int verbose);
 
 int main(int argc, char **argv) {
-    args program_args = {0, DEFAULT_PLAYERS, DEFAULT_HANDS, DEFAULT_SEED, NULL, NULL};
+    args program_args = {DEFAULT_COMMAND, DEFAULT_PLAYERS, DEFAULT_HANDS, DEFAULT_SEED, DEFAULT_VERBOSE, NULL, NULL};
     parse_args(argc, argv, &program_args);
     if (program_args.sort) {
         sort();
     } else {
-        simulation(program_args.players, program_args.hands, program_args.seed, program_args.table, program_args.hand);
+        simulation(program_args.players, program_args.hands, program_args.seed, program_args.table, program_args.hand, program_args.verbose);
     }
     return 0;
 }
 
-void simulation(int num_players, int hands,int seed, char *table_arg, char *hand_arg) {
+void simulation(int num_players, int hands,int seed, char *table_arg, char *hand_arg, int verbose) {
     deck_t deck;
     deck_t players[10]={{{},0,0}};
     deck_t table;
+    stats_t stats = {0,0,0};
     int i;
     srand(seed);
-    printf("seed: %d\n",seed);
+    if (verbose) printf("seed: %d\n",seed);
     fill_deck(&deck);
     for (i=0;i<hands;i++) {
         reset_game(&deck,&table,players,num_players);
@@ -36,8 +45,17 @@ void simulation(int num_players, int hands,int seed, char *table_arg, char *hand
         add_cards(&deck,&table,table_arg);
         play_game(&deck,&table,players,num_players);
         sort_hands(&table,players,num_players);
-        print_game(i+1,&table,players,num_players);
+        if (verbose) print_game(i+1,&table,players,num_players);
+        if (players[0].id == 0) {
+            if (compare_hand(&table,&players[0],&players[1])==0) {
+                stats.tied++;
+            }
+            stats.won++;
+        } else {
+            stats.lost++;
+        }
     }
+    printf("win,lost,tied\n%.3f,%.3f,%.3f\n",stats.won/(float)hands,stats.lost/(float)hands,stats.tied/(float)hands);
 
    return;
 }
