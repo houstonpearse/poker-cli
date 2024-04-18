@@ -10,9 +10,8 @@ unit-test:
 
 .PHONY: sort-test
 sort-test:
-	make poker-cli
-	chmod +x tests/sort-test.sh
-	./tests/sort-test.sh
+	make poker-cli 
+	bash ./tests/sort-test.sh
 
 .PHONY: clean
 clean:
